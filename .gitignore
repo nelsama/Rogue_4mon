@@ -1,0 +1,19 @@
+# Archivos compilados y de build
+build/
+*.o
+*.cfg
+*.map
+*.lbl
+*.bin
+*.hex
+*.sym
+
+# Archivos de sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+*.swo
+
+# Nombre reservado de Windows
+nul
