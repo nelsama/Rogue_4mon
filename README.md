@@ -126,4 +126,6 @@ El juego utiliza el chip de sonido SID 6581 para generar efectos de audio:
 | Recordado | Gris tenue |
 
 ## Licencia
-Proyecto educativo basado en el codigo original de Tetris 6502 + SID 6581.
+Proyecto educativo basado en el código original de Tetris 6502 + SID 6581.
+
+_Screenshot actualizada._
