@@ -90,7 +90,6 @@ static void uart_gotoxy(uint8_t row, uint8_t col);
 static void u8_to_s(uint8_t v, char* b);
 static int16_t abs16(int16_t v);
 static void sid_init(void);
-static void sid_play(uint16_t f, uint8_t d);
 static void sid_pickup(void);
 static void sid_lvlup(void);
 static void sid_hit(void);
@@ -143,25 +142,36 @@ static void uart_gotoxy(uint8_t row, uint8_t col) {
     rom_uart_putc('H');
 }
 
+/* ── SID Enhanced Engine ───────────────────────────────────────────
+ * V1 via sid_play, V2/V3 inline for polyphonic effects. */
+
 static void sid_init(void) {
     SID[0x04]=0; SID[0x0B]=0; SID[0x12]=0; SID[0x18]=0x0F;
 }
+
 static void sid_play(uint16_t f, uint8_t d) {
     SID[0x00]=(uint8_t)(f&0xFF); SID[0x01]=(uint8_t)(f>>8);
     SID[0x05]=0x09; SID[0x06]=0xF9; SID[0x04]=0x41;
     rom_delay_ms(d); SID[0x04]=0x40; rom_delay_ms(2);
 }
+
 static void sid_hit(void) { sid_play(0x0800,30); }
-static void sid_pickup(void) { sid_play(0x0620,20); rom_delay_ms(10); sid_play(0x0930,20); }
-static void sid_lvlup(void) { sid_play(0x0620,60); rom_delay_ms(20); sid_play(0x07BA,60); rom_delay_ms(20); sid_play(0x0930,80); }
-static void sid_die(void) { sid_play(0x0500,80); rom_delay_ms(20); sid_play(0x0300,80); rom_delay_ms(20); sid_play(0x0200,80); rom_delay_ms(20); sid_play(0x0100,150); }
+static void sid_sword(void) { sid_play(0x0E00,15); }
+static void sid_monster(void) { sid_play(0x0200,50); }
+
+static void sid_pickup(void) { SID[0x07]=0x30;SID[0x08]=0x09;SID[0x0C]=0x09;SID[0x0D]=0xF9;SID[0x0B]=0x11;sid_play(0x0620,20);SID[0x0B]=0;rom_delay_ms(10);sid_play(0x0930,20);}
+static void sid_lvlup(void) { sid_play(0x0A28,60);rom_delay_ms(20);sid_play(0x0CCA,60);rom_delay_ms(20);sid_play(0x0A28,80);}
 static void sid_win(void) {
     uint8_t i; uint16_t n[5]={0x0620,0x07BA,0x0930,0x0C44,0x0930};
     for (i=0;i<5;i++) { sid_play(n[i],80); rom_delay_ms(15); }
 }
-static void sid_stairs(void) { sid_play(0x0800,50); rom_delay_ms(15); sid_play(0x0400,60); }
-static void sid_sword(void) { sid_play(0x0E00,15); }
-static void sid_monster(void) { sid_play(0x0200,50); }
+
+static void sid_die(void) {
+    sid_play(0x0500,80);sid_play(0x0300,80);
+    sid_play(0x0200,80);sid_play(0x0100,150);
+}
+
+static void sid_stairs(void) { sid_play(0x0800,50);rom_delay_ms(15);sid_play(0x0400,60); }
 
 static void msg_clear(void) { msg[0]=0; }
 static void msg_set(const char* s) {
