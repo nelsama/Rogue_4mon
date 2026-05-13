@@ -107,9 +107,17 @@ info:
 map:
 	@cat $(MAP_FILE) 2>nul || echo Error: Mapa no encontrado. Compilar primero.
 
-# ── Limpieza ────────────────────────────────────────────
+# ── Limpieza (híbrida: CMD + Git Bash) ───────────────────────
+# Detecta el shell: si 'sh' existe, usa rm; si no, usa rmdir
+SHELL_TYPE := $(shell sh -c "echo unix" 2>NUL)
+ifeq ($(SHELL_TYPE),unix)
+CLEAN_CMD = -rm -rf $(BUILD_DIR) $(OUTPUT_DIR)
+else
+CLEAN_CMD = -if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR) 2>nul & if exist $(OUTPUT_DIR) rmdir /s /q $(OUTPUT_DIR) 2>nul
+endif
+
 clean:
-	-rm -rf $(BUILD_DIR) $(OUTPUT_DIR)
+	$(CLEAN_CMD)
 	@echo Limpieza completa.
 
 # ── Ayuda ───────────────────────────────────────────────
