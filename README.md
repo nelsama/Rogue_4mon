@@ -22,9 +22,10 @@ Un juego de mazmorras procedurales estilo **Rogue/NetHack** implementado en **C8
 |-------|--------|
 | **W/A/S/D** | Moverse / Atacar |
 | **Q** | Tomar objeto del suelo |
-| **>** | Bajar escaleras al siguiente piso |
-| **ESPACIO** | Esperar un turno |
-| **ESC** | Salir del juego |
+| **>** / **G** / **.** | Bajar escaleras al siguiente piso |
+| **E** | Ver equipo (armas/armaduras/anillos) |
+| **H** / **?** | Ayuda: simbolos del juego |
+| **ESC** (x2) | Salir del juego |
 
 ## 🛠️ Especificaciones Tecnicas
 
